@@ -24,6 +24,7 @@ def like():
 
     viewed_id = request.form.get(viewed_id)
     like = request.form.get(like)
+
     viewer_id = session.get(user_id)
 
     view = View(viewer_id=viewer_id,
@@ -33,7 +34,10 @@ def like():
     db.session.add(view)
     db.sesssion.commit()
 
-    user_ids = User.query.all()
+    users = User.query.all()
+    user_ids = []
+    for user in users:
+        user_ids.append(user.user_id)
     for user_id in user_ids:
         if user_id == viewed_id:
             user_ids.remove(user_id)
@@ -42,7 +46,7 @@ def like():
 
     view_id = random.choice(user_ids)
 
-    return jsonify({"view_id": view_id)
+    return jsonify({"view_id": view_id})
 
 
 if __name__ == '__main__':
