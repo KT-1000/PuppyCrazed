@@ -14,5 +14,10 @@ def match():
     return render_template("match.html")
 
 
+@app.route('/like')
+def like():
+    return redirect()
+
+
 if __name__ == '__main__':
     app.run()
