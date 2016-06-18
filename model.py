@@ -37,17 +37,22 @@ class User(db.Model):
                                       self.user_lname,
                                       self.pet_img)
 
-    # def matches(self):
-    #     """given a user, returns the corresponding user objects that are matches."""
-    #     potential_matches = db.session.query(User).join(View).filter(View.viewer_id == self.user_id).filter(View.like == True).all()
+    def matches(self):
+        """given a user, returns the corresponding user objects that are matches."""
+        potential_matches = db.session.query(User).join(View).filter(View.viewed_id == self.user_id).filter(View.like == True).all()
+        matches = []
+        for match in potential_matches:
+            # determine if the liked user has also liked self.user_id
+            if self.has_liked(match.user_id):
+                pair = db.session.query(User).filter(User.user_id == match.user_id).first()
+                matches.append(pair)
+        return matches
 
-    #     for match in potential_matches:
-    #         # determine if the liked user has also liked self.user_id
-    #         pass
+
 
     def has_liked(self, user_id):
         """Has the user object liked the user_id supplied in the input"""
-        view = db.session.query(View).filter(View.viewer_id == self.user_id).filter(View.viewed_id == user_id).filter(View.like is True).first()
+        view = db.session.query(View).filter(View.viewer_id == self.user_id).filter(View.viewed_id == user_id).filter(View.like == True).first()
         return view is not None
 
 
@@ -61,13 +66,10 @@ class View(db.Model):
                           db.ForeignKey("users.user_id"),
                           nullable=False)
     viewed_id = db.Column(db.Integer,
-                          db.ForeignKey("users.user_id"),
                           nullable=False)
     like = db.Column(db.Boolean, nullable=False)
 
     viewer = db.relationship("User", foreign_keys=[viewer_id])
-
-    viewed = db.relationship("User", foreign_keys=[viewed_id])
 
     def __repr__(self):
         """Displays view info"""
@@ -95,5 +97,5 @@ if __name__ == "__main__":
 
     from PuppyCrazed import app
     connect_to_db(app)
-    db.create_all()
+
     print "Connected to DB."
