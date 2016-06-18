@@ -23,6 +23,8 @@ class User(db.Model):
     user_lname = db.Column(db.String(64), nullable=True)
     user_email = db.Column(db.String(64), nullable=True, unique=True)
     user_password = db.Column(db.String(64), nullable=True)
+    user_gender = db.Column(db.String(64), nullable=True)
+    user_preferred_gender = db.Column(db.String(64), nullable=True)
     pet_img = db.Column(db.String(255), nullable=True)
     pet_name = db.Column(db.String(64), nullable=True)
     pet_name = db.Column(db.String(255), nullable=True)
@@ -34,6 +36,19 @@ class User(db.Model):
                                       self.user_fname,
                                       self.user_lname,
                                       self.pet_img)
+
+    # def matches(self):
+    #     """given a user, returns the corresponding user objects that are matches."""
+    #     potential_matches = db.session.query(User).join(View).filter(View.viewer_id == self.user_id).filter(View.like == True).all()
+
+    #     for match in potential_matches:
+    #         # determine if the liked user has also liked self.user_id
+    #         pass
+
+    def has_liked(self, user_id):
+        """Has the user object liked the user_id supplied in the input"""
+        view = db.session.query(View).filter(View.viewer_id == self.user_id).filter(View.viewed_id == user_id).filter(View.like is True).first()
+        return view is not None
 
 
 class View(db.Model):
@@ -48,6 +63,7 @@ class View(db.Model):
     viewed_id = db.Column(db.Integer,
                           db.ForeignKey("users.user_id"),
                           nullable=False)
+    like = db.Column(db.Boolean, nullable=False)
 
     viewer = db.relationship("User", foreign_keys=[viewer_id])
 
