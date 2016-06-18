@@ -22,10 +22,6 @@ def home():
 @app.route('/matches')
 def match():
 
-
-    view_id = random.choice(user_ids)
-    return render_template("match.html", view_id=view_id)
-
     session["user_id"] = 1
 
     users = User.query.all()
