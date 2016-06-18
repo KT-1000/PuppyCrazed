@@ -1,14 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
     <div id="potential" class="col-xs-6 col-xs-offset-2">
-        <div id="name">Name Here</div>
-        <div id="USER ID FROM DB HERE">
-            <a href="PUPPY IMAGE URL HERE">Puppy Image Here</a>
-        </div>
+        <div id="name" data-id="{{ view_id }}">{{ view_id.fname }}</div>
+        <a id="image" href="{{ view_id.pet_img }}"></a>
         <button id="dislike">Dislike</button>
         <button id="like">Like</button>
     </div>
     <div id="next" class="col-xs-4">
         <button id="next"></button>
     </div>
+
+<script type="text/javascript">
+
+function nextView(result) {
+
+    $("#name").text(view_id.fname);
+    $("#image").attr("href", view_id.pet_img);
+    $("#name").attr("data-id", view_id);
+}
+
+
+function like(evt) {
+
+    .post("/like.json", {viewed_id: $("#name").data('id'), like: true, nextView)
+    }})
+}
+
+$("#like").click(like);
+
+function dislike(evt) {
+
+    .post("/like.json", {viewed_id: $("#name").data('id'), like: false, nextView)
+    }})
+}
+
+$("#dislike").click(dislike);
+
+</script>
+
 {% endblock %}
