@@ -2,7 +2,8 @@
 {% block content %}
     <div class="col-xs-4">
     {% for match in matches %}
-        {{ match }}
+        {{ match.user_fname }}
+        {{ match.user_lname }}
     {% endfor %}
     </div>
 {% endblock %}

@@ -13,17 +13,18 @@ app.secret_key = "ABC"
 def home():
 
     session["user_id"] = 1
-
-    return render_template("home.html")
+    user = User.query.get(1)
+    matches = user.matches()
+    return render_template("home.html", matches=matches)
 
 
 @app.route('/matches')
 def match():
 
-<<<<<<< Updated upstream
+
     view_id = random.choice(user_ids)
     return render_template("match.html", view_id=view_id)
-=======
+
     session["user_id"] = 1
 
     users = User.query.all()
@@ -39,7 +40,6 @@ def match():
     view = User.query.filter_by(user_id=view_id).one()
 
     return render_template("match.html", view=view)
->>>>>>> Stashed changes
 
 
 @app.route('/like.json')
