@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
     <div id="potential" class="col-xs-6 col-xs-offset-2">
-        <div id="name" data-id="{{ view_id }}">{{ view_id.fname }}</div>
-        <a id="image" href="{{ view_id.pet_img }}"></a>
+        <div id="name" data-id="{{ view.view_id }}">{{ view.fname }}</div>
+        <a id="image" href="{{ view.pet_img }}"></a>
         <button id="dislike">Dislike</button>
         <button id="like">Like</button>
     </div>
@@ -14,9 +14,9 @@
 
 function nextView(result) {
 
-    $("#name").text(view_id.fname);
-    $("#image").attr("href", view_id.pet_img);
-    $("#name").attr("data-id", view_id);
+    $("#name").text(view.fname);
+    $("#image").attr("href", view.pet_img);
+    $("#name").attr("data-id", view.view_id);
 }
 
 

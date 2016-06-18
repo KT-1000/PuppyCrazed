@@ -1,21 +1,45 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, session
 from model import View, User
+
 
 import random
 
 app = Flask(__name__)
 
+app.secret_key = "ABC"
+
 
 @app.route('/')
 def home():
+
+    session["user_id"] = 1
+
     return render_template("home.html")
 
 
 @app.route('/matches')
 def match():
 
+<<<<<<< Updated upstream
     view_id = random.choice(user_ids)
     return render_template("match.html", view_id=view_id)
+=======
+    session["user_id"] = 1
+
+    users = User.query.all()
+    user_ids = []
+    for user in users:
+        user_ids.append(user.user_id)
+    for user_id in user_ids:
+        if user_id == viewer_id:
+            user_ids.remove(user_id)
+
+    view_id = random.choice(user_ids)
+
+    view = User.query.filter_by(user_id=view_id).one()
+
+    return render_template("match.html", view=view)
+>>>>>>> Stashed changes
 
 
 @app.route('/like.json')
@@ -24,7 +48,7 @@ def like():
     viewed_id = request.form.get(viewed_id)
     like = request.form.get(like)
 
-    viewer_id = session.get(user_id)
+    viewer_id = session.get("user_id")
 
     view = View(viewer_id=viewer_id,
                 viewed_id=viewed_id,
@@ -45,7 +69,9 @@ def like():
 
     view_id = random.choice(user_ids)
 
-    return jsonify({"view_id": view_id})
+    view = User.query.filter_by(user_id=view_id).one()
+
+    return jsonify({"view_id": view})
 
 
 if __name__ == '__main__':
